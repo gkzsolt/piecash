@@ -13,6 +13,8 @@ from .book import Book
 from .._common import GnucashException
 from ..sa_extra import create_piecash_engine, DeclarativeBase, Session
 
+from .._declbase import DeclarativeBaseGuid
+
 # version of tables changed between 2.6 and 3.0
 #   ('invoices', 4)
 #   ('prices', 3)
@@ -427,6 +429,8 @@ def open_book(
         url_backup = url + ".{:%Y%m%d%H%M%S}.gnucash".format(datetime.datetime.now())
 
         shutil.copyfile(url, url_backup)
+
+    DeclarativeBaseGuid.metadata.create_all(engine)
 
     locks = list(engine.execute(gnclock.select()))
 
